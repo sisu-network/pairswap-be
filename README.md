@@ -1,6 +1,6 @@
 # Pairswap's backend
 
-1. Run Postgres database:
+1. Run mysql database:
 ```bash
 make dev-up
 ```

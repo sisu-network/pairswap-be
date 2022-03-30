@@ -1,6 +1,6 @@
 package store
 
-var dbConfig = PostgresConfig{
+var dbConfig = DbConfig{
 	Host:     "127.0.0.1",
 	Port:     5432,
 	Schema:   "pairswap",

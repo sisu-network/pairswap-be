@@ -12,7 +12,7 @@ type AppConfig struct {
 	SisuServerURL   string
 	SisuGasCostPath string
 	Port            int
-	DB              store.PostgresConfig
+	DB              store.DbConfig
 }
 
 func NewDefaultAppConfig() AppConfig {
@@ -26,7 +26,7 @@ func NewDefaultAppConfig() AppConfig {
 		panic(err)
 	}
 
-	dbConfig := store.PostgresConfig{
+	dbConfig := store.DbConfig{
 		Host:     os.Getenv("DB_HOST"),
 		Port:     dbPort,
 		Schema:   os.Getenv("DB_SCHEMA"),
@@ -35,7 +35,7 @@ func NewDefaultAppConfig() AppConfig {
 		Option:   "charset=utf8&parseTime=True&loc=Local",
 	}
 
-	portStr := os.Getenv("PORT")
+	portStr := os.Getenv("SISU_PORT")
 	port, err := strconv.Atoi(portStr)
 	if err != nil {
 		panic(err)

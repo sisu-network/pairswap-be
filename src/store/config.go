@@ -1,7 +1,7 @@
 package store
 
-// PostgresConfig contains config data to connect to MySQL database
-type PostgresConfig struct {
+// DbConfig contains config data to connect to MySQL database
+type DbConfig struct {
 	Host                      string `json:"host"`
 	Port                      int    `json:"port"`
 	Schema                    string `json:"schema"`
