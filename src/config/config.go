@@ -35,7 +35,7 @@ func NewDefaultAppConfig() AppConfig {
 		Option:   "charset=utf8&parseTime=True&loc=Local",
 	}
 
-	portStr := os.Getenv("SISU_PORT")
+	portStr := os.Getenv("PORT")
 	port, err := strconv.Atoi(portStr)
 	if err != nil {
 		panic(err)
