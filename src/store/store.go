@@ -113,7 +113,9 @@ func (d *DBStores) doMigration() error {
 		return err
 	}
 
-	m.Up()
+	if err := m.Up(); err != nil {
+		panic(err)
+	}
 	return nil
 }
 
