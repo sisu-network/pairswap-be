@@ -18,7 +18,7 @@ func NewSupportFormStore(db *gorm.DB) *SupportFormStore {
 
 func (s *SupportFormStore) CreateSupportForm(ctx context.Context, supportForm *model.SupportForm) error {
 	if supportForm == nil {
-		log.Warn("token is nil")
+		log.Warn("supportForm is nil")
 		return nil
 	}
 
