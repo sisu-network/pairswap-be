@@ -7,6 +7,7 @@ services:
     restart: always
     environment:
       - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_DATABASE=proxy_api
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
       interval: 3s

@@ -3,12 +3,9 @@ package store
 import (
 	"database/sql"
 	"fmt"
-	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/golang-migrate/migrate"
-	"github.com/golang-migrate/migrate/database/mysql"
 	_ "github.com/golang-migrate/migrate/source/file"
 
 	"github.com/sisu-network/lib/log"
@@ -20,6 +17,7 @@ import (
 type DBStores struct {
 	TokenStore       *TokenStore
 	SupportFormStore *SupportFormStore
+	HistoryStore     *HistoryStore
 	db               *gorm.DB
 	Config           DbConfig
 }
@@ -30,8 +28,6 @@ func NewDBStores(cfg DbConfig) (*DBStores, error) {
 		Config: cfg,
 	}
 
-	store.doMigration()
-
 	db, err := store.connectORM(cfg)
 	if err != nil {
 		return nil, err
@@ -39,6 +35,7 @@ func NewDBStores(cfg DbConfig) (*DBStores, error) {
 
 	store.TokenStore = NewTokenStore(db)
 	store.SupportFormStore = NewSupportFormStore(db)
+	store.HistoryStore = NewHistoryStore(db)
 	store.db = db
 
 	return store, nil
@@ -85,38 +82,6 @@ func (d *DBStores) connect() *sql.DB {
 	log.Info("Db is connected successfully")
 
 	return database
-}
-
-func (d *DBStores) doMigration() error {
-	database := d.connect()
-
-	driver, err := mysql.WithInstance(database, &mysql.Config{})
-	if err != nil {
-		return err
-	}
-
-	// Write the migrations to a temporary directory
-	// so they don't need to be managed out of band from the dheart binary.
-	migrationDir, err := MigrationsTempDir()
-	if err != nil {
-		return fmt.Errorf("failed to create temporary directory for migrations: %w", err)
-	}
-	defer os.RemoveAll(migrationDir)
-
-	m, err := migrate.NewWithDatabaseInstance(
-		"file://"+migrationDir,
-		"mysql",
-		driver,
-	)
-
-	if err != nil {
-		return err
-	}
-
-	if err := m.Up(); err != nil {
-		panic(err)
-	}
-	return nil
 }
 
 func (d *DBStores) connectORM(config DbConfig) (*gorm.DB, error) {

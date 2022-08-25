@@ -53,8 +53,22 @@ func (a *App) registerHandlers() {
 		Handler: gasCostHandler.HandleGetGasCost,
 	}
 
+	historyHandler := NewHistoryHandler(a.Db)
+	submitHistoryRoute := &Route{
+		Path:    "/history",
+		Method:  http.MethodPost,
+		Handler: historyHandler.HandleSubmitHistory,
+	}
+	getHistoryRoute := &Route{
+		Path:    "/histories",
+		Method:  http.MethodGet,
+		Handler: historyHandler.HandleGetHistory,
+	}
+
 	a.Router.HandleFunc(supportFormRoute.Path, supportFormRoute.Handler).Methods(supportFormRoute.Method)
 	a.Router.HandleFunc(gasCostRoute.Path, gasCostRoute.Handler).Methods(gasCostRoute.Method)
+	a.Router.HandleFunc(submitHistoryRoute.Path, submitHistoryRoute.Handler).Methods(submitHistoryRoute.Method)
+	a.Router.HandleFunc(getHistoryRoute.Path, getHistoryRoute.Handler).Methods(getHistoryRoute.Method)
 }
 
 func (a *App) registerMiddlewares() {
