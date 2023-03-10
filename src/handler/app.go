@@ -65,10 +65,18 @@ func (a *App) registerHandlers() {
 		Handler: historyHandler.HandleGetHistory,
 	}
 
+	gatewayHandler := NewGatewayHandler(a.Config.SisuServerURL, "/getPubKeys")
+	gatewayRoute := &Route{
+		Path:    "/gateway",
+		Method:  http.MethodGet,
+		Handler: gatewayHandler.GetGatewayAddress,
+	}
+
 	a.Router.HandleFunc(supportFormRoute.Path, supportFormRoute.Handler).Methods(supportFormRoute.Method)
 	a.Router.HandleFunc(gasCostRoute.Path, gasCostRoute.Handler).Methods(gasCostRoute.Method)
 	a.Router.HandleFunc(submitHistoryRoute.Path, submitHistoryRoute.Handler).Methods(submitHistoryRoute.Method)
 	a.Router.HandleFunc(getHistoryRoute.Path, getHistoryRoute.Handler).Methods(getHistoryRoute.Method)
+	a.Router.HandleFunc(gatewayRoute.Path, gatewayRoute.Handler).Methods(gatewayRoute.Method)
 }
 
 func (a *App) registerMiddlewares() {
